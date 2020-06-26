@@ -1,6 +1,7 @@
 import React from 'react';
 
 const ViewTransactions = ({ transactions }) => {
+  if (!transactions) return <p> No transactions found</p>;
   return (
     <div>
       <table className="striped centered my-2">
