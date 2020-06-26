@@ -1,6 +1,6 @@
 import React from 'react';
 
-const ViewTransactions = () => {
+const ViewTransactions = ({ transactions }) => {
   return (
     <div>
       <table className="striped centered my-2">
@@ -12,18 +12,12 @@ const ViewTransactions = () => {
         </thead>
 
         <tbody>
-          <tr>
-            <td>Eclair</td>
-            <td>$0.87</td>
-          </tr>
-          <tr>
-            <td>Jellybean</td>
-            <td>$3.76</td>
-          </tr>
-          <tr>
-            <td>Lollipop</td>
-            <td>$7.00</td>
-          </tr>
+          {transactions.map((transction) => (
+            <tr>
+              <td>{transction.item}</td>
+              <td>Rs. {transction.amount}/-</td>
+            </tr>
+          ))}
         </tbody>
       </table>
     </div>
