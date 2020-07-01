@@ -3,6 +3,10 @@ import ViewTransactions from './ViewTransactions';
 import ViewAccounts from './ViewAccounts';
 
 const ExpensePage = () => {
+  const [expense, setExpense] = useState(0);
+  const [income, setIncome] = useState(0);
+  const [balance, setBalance] = useState(0);
+
   const [transaction, setTransaction] = useState({
     item: '',
     amount: 0,
@@ -24,7 +28,54 @@ const ExpensePage = () => {
 
   useEffect(() => {
     loadTransactions();
+    loadExpense();
+    loadIncome();
   }, []);
+
+  // Load expense
+  const loadExpense = async () => {
+    try {
+      const trans = JSON.parse(await localStorage.getItem('transactions'));
+
+      let sumTrans = 0;
+      for (let i = 0; i < trans.length; i++) {
+        if (trans[i].amount < 0) {
+          //console.log(trans[i]);
+          sumTrans = sumTrans + parseInt(trans[i].amount);
+        }
+      }
+
+      console.log(`Total expense is ${sumTrans}`);
+
+      setExpense(sumTrans);
+
+      console.log(expense);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  // Load income
+  const loadIncome = async () => {
+    try {
+      const trans = JSON.parse(await localStorage.getItem('transactions'));
+
+      let sumTrans = 0;
+      for (let i = 0; i < trans.length; i++) {
+        if (trans[i].amount > 0) {
+          //console.log(trans[i]);
+          sumTrans = sumTrans + parseInt(trans[i].amount);
+        }
+      }
+
+      console.log(`Total income is ${sumTrans}`);
+
+      setIncome(sumTrans);
+      //setAccounts({ ...accounts, income: sumTrans });
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const onInputChange = (e) =>
     setTransaction({ ...transaction, [e.target.name]: e.target.value });
@@ -36,6 +87,11 @@ const ExpensePage = () => {
       console.log(transaction);
       saveItem();
     }
+
+    loadExpense();
+    loadIncome();
+
+    setTransaction({ item: '', amount: 0 });
   };
 
   const saveItem = async () => {
@@ -94,7 +150,7 @@ const ExpensePage = () => {
         </div>
       </form>
 
-      <ViewAccounts />
+      <ViewAccounts expense={expense} income={income} />
       <ViewTransactions transactions={transactions} />
     </div>
   );

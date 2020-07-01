@@ -14,9 +14,11 @@ const ViewTransactions = ({ transactions }) => {
 
         <tbody>
           {transactions.map((transction) => (
-            <tr>
+            <tr key={transction.item}>
               <td>{transction.item}</td>
-              <td>Rs. {transction.amount}/-</td>
+              <td className={transction.amount < 0 ? 'red-text' : 'green-text'}>
+                Rs. {transction.amount}/-
+              </td>
             </tr>
           ))}
         </tbody>
